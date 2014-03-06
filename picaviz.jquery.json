@@ -1,0 +1,28 @@
+{
+  "name": "picaviz",
+  "title": "Picapica visualization",
+  "description": "Visualization of a text and its text reuse sources.",
+  "version": "0.1.0",
+  "homepage": "?",
+  "author": {
+    "name": "Jan Graßegger",
+    "url": "https://github.com/gesundkrank"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gesundkrank/picaviz.git"
+  },
+  "bugs": "",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "~0.1.0"
+  },
+  "keywords": [
+    "jquery-plugin"
+  ]
+}
