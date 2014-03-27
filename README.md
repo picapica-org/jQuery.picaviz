@@ -31,13 +31,14 @@ The model has to look like this:
 [
   {
     active: true|false,
+    groupId: String,
     source:{
       id: String,
       title: String,
       start: Number,
       end: Number
     }
-    text:{
+    passage:{
       start: Number,
       end: Number
     }
