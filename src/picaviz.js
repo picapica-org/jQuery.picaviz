@@ -53,18 +53,6 @@
 
                 numReferences++;
 
-                //QUESTION: why creating new objects instead of
-                //          using the already existing reference objects?
-                //          Would you discriminate between a reference as model and a visual reference
-                //
-                /*var reference = {
-                    //Kategorie    : data.getKategorie(),
-                    page    : Number(data.getDissPage()[0][0]),
-                    sourceId : data.source.id,  // why not getSource()
-                    object   : data,
-                    Length   : data.getLength()
-                };*/
-
                 maxPage = Math.max(reference.passage.start, maxPage);
 
                 // Creating sources
@@ -75,7 +63,8 @@
                 if(sources[sourceId] === undefined){
                     sources[sourceId] = {
                         references: [reference],
-                        id : sourceId
+                        id : sourceId,
+                        title: reference.source.title
                     };
                     numSources++;
                 }
@@ -189,9 +178,10 @@
             self.$el = $el;
 
             self.layers = ['pos', 'posSource'];
-
             self.m = [20, 160, 20, 34];
             self.w = 650 - self.m[1] - self.m[3];
+
+
             var windowHeight = $(window).height();
             self.h = windowHeight - self.m[0] - self.m[2];
 
@@ -206,8 +196,6 @@
 
             //this.line = d3.svg.line(); // necessary
             var axis = d3.svg.axis().orient('left');
-
-
 
             /*
              *  ------------------------------------------------------------------------------
@@ -294,7 +282,6 @@
                 $(gSource[0]).data('source', source);
                     //.click(self.selectSource);
 
-                /*var rect =*/
                 gSource.append('svg:rect')
                     .attr('height', height)
                     .attr('x', 0)
@@ -304,9 +291,8 @@
                 if(model.length*3 < windowHeight || height > 5){
 
                     //var finding = {sourceId : source.name, sourceTimestamp : source.timestamp};
-                    var title = source.name;
-                    var name;
-                    if(name && name.length >= 25) { name = name.substring(0,22) + '...'; }
+                    var title = source.title;
+                    if(title && title.length >= 25) { title = title.substring(0,22) + '...'; }
 
                     var text = gSource.append('svg:text')
                         .attr('class', 'groupLabel')
@@ -337,12 +323,11 @@
                   extents = actives.map(function(p) { return self.y[p].brush.extent(); });
 
             self.foreground.classed('fade', function(d) {
-                if(activeSource !== 'all' && d.sourceId !== activeSource) { return true; }
+                if(activeSource !== 'all' && d.source.id !== activeSource) { return true; }
 
                 var active = !actives.every(function(p, i) {
                   return extents[i][0] <= d[p] && d[p] <= extents[i][1];
                 });
-                //if(!active) activeRefs.push(d.object.id);
                 if(!active) { activeRefs.push(d.id); }
 
                 return active;
@@ -351,13 +336,20 @@
         },
         /**
         * Called at the end of a filter action. Calls brush and sets active references
-        * to filtered
+        * to be filtered
         */
         _brushend : function(){
-            var references = this.model;
             var activeRefs = $.picaviz._brush();
             self.$el.trigger('change', [activeRefs]);
             self.$el.trigger('change:activeRefs', [activeRefs]);
+        },
+        _selectSource : function(){
+            var $target = $(event.target);
+            var $group = $target.parent();
+            var source = $group.data('source');
+
+            self.activeSource = self.activeSource === source.id ? 'all' : source.id;
+            $.picaviz._brushend();
         }
     };
 
@@ -376,6 +368,7 @@
 
             if(options) { $.extend(settings, options); }
             $.picaviz._render(this, model, settings);
+            $(this).on('click', '.group', $.picaviz._selectSource);
 
             //console.log($.picaviz._getDataArrayWithSourceIds(model));
 
