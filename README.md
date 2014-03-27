@@ -16,7 +16,11 @@ In your web page:
 <script src="dist/jquery.picaviz.min.js"></script>
 <script>
 jQuery(function($) {
-  $('.container').picaviz(model, options);
+  $('.container').picaviz(model, options)
+    //add event listeners: 
+    .on('change', function(event, activeIds){
+        console.log(activeIds);
+    })
 });
 </script>
 ```
@@ -30,8 +34,7 @@ The model has to look like this:
 
 [
   {
-    active: true|false,
-    groupId: String,
+    id: unique identifier,
     source:{
       id: String,
       title: String,
@@ -52,10 +55,12 @@ Parsed array for drawing
 ```Javascript
 [
   {
+    id : id,
     source: source object,
     posSource : Number
   }
 ]
+```
 
 ## Examples
 _(Coming soon)_

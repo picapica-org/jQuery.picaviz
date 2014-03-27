@@ -21,46 +21,51 @@
           throws(block, [expected], [message])
     */
 
+    var model = [
+        {
+            id : 0,
+            source : {
+                id : 0,
+                title : 'test',
+                start : 1,
+                end : 2
+            },
+            passage : {
+                start : 3,
+                end : 5
+            }
+        },
+        {
+            id : 1,
+            source : {
+                id : 0,
+                title : 'test',
+                start : 3,
+                end : 6
+            },
+            passage : {
+                start : 5,
+                end : 6
+            }
+        },
+        {
+            id : 2,
+            source : {
+                id : 1,
+                title : 'test2',
+                start : 1,
+                end : 4
+            },
+            passage : {
+                start : 2,
+                end : 3
+            }
+        }
+    ];
+
     module('jQuery.picaviz._parseSources', {
         setup : function(){
-            this.model = [
-                {
-                    source : {
-                        id : 0,
-                        title : 'test',
-                        start : 1,
-                        end : 2
-                    },
-                    passage : {
-                        start : 3,
-                        end : 5
-                    }
-                },
-                {
-                    source : {
-                        id : 0,
-                        title : 'test',
-                        start : 3,
-                        end : 6
-                    },
-                    passage : {
-                        start : 5,
-                        end : 6
-                    }
-                },
-                {
-                    source : {
-                        id : 1,
-                        title : 'test2',
-                        start : 1,
-                        end : 4
-                    },
-                    passage : {
-                        start : 2,
-                        end : 3
-                    }
-                }
-            ];
+            this.model = model;
         }
     });
 
@@ -72,44 +77,7 @@
 
     module('jQuery.picaviz._getDataArrayWithSourceIds', {
         setup : function() {
-            this.model = [
-                {
-                    source : {
-                        id : 0,
-                        title : 'test',
-                        start : 1,
-                        end : 2
-                    },
-                    passage : {
-                        start : 3,
-                        end : 5
-                    }
-                },
-                {
-                    source : {
-                        id : 0,
-                        title : 'test',
-                        start : 3,
-                        end : 6
-                    },
-                    passage : {
-                        start : 5,
-                        end : 6
-                    }
-                },
-                {
-                    source : {
-                        id : 1,
-                        title : 'test2',
-                        start : 1,
-                        end : 4
-                    },
-                    passage : {
-                        start : 2,
-                        end : 3
-                    }
-                }
-            ];
+            this.model = model;
             this.sources = $.picaviz._parseSources(this.model);
         }
     });

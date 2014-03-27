@@ -11,6 +11,8 @@
 
     var self = this;
 
+    this.activeSource = 'all';
+
     $.picaviz = {
         _sortSources : function(sources){
             var sourceValues = [];
@@ -139,7 +141,6 @@
                 var sourceReferences = sources[j].references;
 
                 for(var k in sourceReferences){
-
                     var sourceReference = sourceReferences[k];
 
                     if(counter !== 0) { referencePosition += self.heightReferences; }
@@ -182,9 +183,10 @@
                 'Q'+data[1][0]/2+','+data[0][1]+','+data[1][0]+','+data[1][1]+
                 'Q'+data[1][0]*1.5+','+data[2][1]+','+data[2][0]+','+data[2][1];
         },
-        //_render : function(el, model, settings)
-        _render : function(el, model){
+        _render : function(el, model, settings){
             var $el = $(el).empty();
+            self.el = el;
+            self.$el = $el;
 
             self.layers = ['pos', 'posSource'];
 
@@ -229,8 +231,8 @@
 
                 self.y[layer].brush = d3.svg.brush()
                     .y(self.y[layer])
-                    .on('brush', self.brush)
-                    .on('brushend', self.brushend);
+                    .on('brush', $.picaviz._brush)
+                    .on('brushend', $.picaviz._brushend);
              });
 
               // Add foreground curves.
@@ -260,8 +262,8 @@
                   .attr('text-anchor', 'middle')
                   .attr('y', -9)
                   .text(function(d){
-                    if(d === 'posQuelle') { return 'Quelle'; }
-                    if(d === 'pos') { return 'Fundstellen'; }
+                    if(d === 'posSource') { return settings.sourcesLabel; }
+                    if(d === 'pos') { return settings.passagesLabel; }
                     //if(d == "pos") return "";
                     return d;
                   });
@@ -279,8 +281,9 @@
               //gruppen mit Quellen
              var yQuellen = self.y['posSource'];
 
-             self.gSources = svg.selectAll('.posQuelle');
-            $.each(sources, function(source){
+             self.gSources = svg.selectAll('.posSource');
+            $.each(sources, function(){
+                var source = this;
                 var ystart = yQuellen(source.start);
                 var ystop = yQuellen(source.stop);
                 var height = Math.abs(ystop-ystart);
@@ -325,6 +328,36 @@
                     });
                 }
             });
+        },
+        _brush : function() {
+            var activeRefs = [];
+            var activeSource = self.activeSource;
+
+            var actives = self.layers.filter(function(p) { return !self.y[p].brush.empty(); }),
+                  extents = actives.map(function(p) { return self.y[p].brush.extent(); });
+
+            self.foreground.classed('fade', function(d) {
+                if(activeSource !== 'all' && d.sourceId !== activeSource) { return true; }
+
+                var active = !actives.every(function(p, i) {
+                  return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+                });
+                //if(!active) activeRefs.push(d.object.id);
+                if(!active) { activeRefs.push(d.id); }
+
+                return active;
+            });
+            return activeRefs;
+        },
+        /**
+        * Called at the end of a filter action. Calls brush and sets active references
+        * to filtered
+        */
+        _brushend : function(){
+            var references = this.model;
+            var activeRefs = $.picaviz._brush();
+            self.$el.trigger('change', [activeRefs]);
+            self.$el.trigger('change:activeRefs', [activeRefs]);
         }
     };
 
@@ -336,7 +369,10 @@
                 return;
             }
 
-            var settings = {};
+            var settings = {
+                sourcesLabel : 'sources',
+                passagesLabel: 'passages'
+            };
 
             if(options) { $.extend(settings, options); }
             $.picaviz._render(this, model, settings);

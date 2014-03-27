@@ -21,6 +21,7 @@
       $(document).ready(function(){
           var model = [
             {
+                id : 0,
                 source : {
                     id : 0,
                     title : 'test',
@@ -33,6 +34,7 @@
                 }
             },
             {
+                id : 1,
                 source : {
                     id : 0,
                     title : 'test',
@@ -45,6 +47,7 @@
                 }
             },
             {
+                id : 2,
                 source : {
                     id : 1,
                     title : 'test2',
@@ -57,7 +60,10 @@
                 }
             }
         ];
-        $("#visualisation").picaviz(model);
+        $("#visualisation").picaviz(model)
+            .on('change', function(event, refs){
+                console.log(refs);
+            });
       });
     </script>
 
