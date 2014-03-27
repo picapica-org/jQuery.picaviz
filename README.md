@@ -37,7 +37,7 @@ The model has to look like this:
       start: Number,
       end: Number
     }
-    text{
+    text:{
       start: Number,
       end: Number
     }
@@ -46,6 +46,15 @@ The model has to look like this:
 ]
 
 ```
+
+Parsed array for drawing
+```Javascript
+[
+  {
+    source: source object,
+    posSource : Number
+  }
+]
 
 ## Examples
 _(Coming soon)_

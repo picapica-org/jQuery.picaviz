@@ -1,0 +1,88 @@
+@charset "UTF-8";
+#parallelView{
+  position: fixed;
+  background-color: white;
+  height: 100%;
+  width: 650px;
+  top:0px;
+  padding-top: 10px;
+  right: 0;
+  margin-right: -590px;
+  border-left: 1px solid $grey2;
+  z-index: 3;
+}
+
+
+
+#coordinates svg {
+  font-size: 14px;
+}
+
+.foreground path{
+   stroke:blue;
+   fill: none;
+   stroke-opacity: .5;
+}
+
+.foreground path.fade {
+  stroke: #000;
+  stroke-opacity: .05;
+}
+
+.legend {
+  font-size: 18px;
+  font-style: oblique;
+}
+
+.legend line {
+  stroke-width: 2px;
+}
+
+
+
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.trait.pos, .trait.axis, .trait .tick{
+    display: none;
+}
+
+.trait.posSource .axis g{
+  display: none;
+}
+
+      /*  .axis line, .axis path {
+          opacity:0;
+        }
+      }*/
+
+.axis line, .axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  text-shadow: 0 1px 0 #fff;
+}
+
+      /*.group{
+        cursor: pointer;
+
+        &.fade{
+          opacity: .5;
+        }
+
+        .groupLabel{
+          font-size:10px;
+        }
+
+      }
+
+
+    }
+  }
+}*/
